@@ -33,6 +33,13 @@ checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleC
             }
         }
     }
+
+       stage('Nexus Artifact Uploader')
+	{
+	steps{
+		nexusArtifactUploader artifacts: [[artifactId: 'prabhav-1', classifier: '', file: 'target/prabhav-1.war', type: 'war']], credentialsId: '1fd13c5e-9ac7-4f07-9b47-2b60acc81c81', groupId: 'nexus.happytrip', nexusUrl: '172.31.12.84:9030', nexusVersion: 'nexus2', protocol: 'http', repository: 'test123', version: '${BUILD_NUMBER}'
+		}
+			}
 	
   }
 	post
