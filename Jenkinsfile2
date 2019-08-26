@@ -1,14 +1,36 @@
 pipeline {
  	agent { label 'hostgvt' }
- tool name: 'Ansible-gvt', type: 'org.jenkinsci.plugins.ansible.AnsibleInstallation'
+// tool name: 'Ansible-gvt', type: 'org.jenkinsci.plugins.ansible.AnsibleInstallation'
 tools {
         jdk 'JDK8gvtlocal'
         maven 'linuxhostmaven'
   //     org.jenkinsci.plugins.ansible.AnsibleInstallation 'Ansible-gvt'   
      }
+environment {
+        JOB_ANSIBLE_TOOL = "ansible279"
+ }
   
 stages {
     
+
+
+
+
+
+
+    stages {
+     
+        stage('Get ansible tool PATH') {
+            steps {
+                script {
+                    ansibleHome = tool name: "${env.JOB_ANSIBLE_TOOL}"
+ }
+            }
+        }
+
+
+
+
 	stage('Source') { 
      		 steps {
 
@@ -71,7 +93,12 @@ dir("source")
                 }
                           }
 
-
+stage('Check ansible version') {
+            steps {
+                sh "${ansibleHome}/ansible --version"
+ sh "${ansibleHome}/ansible-playbook --version"
+ }
+        }
 	
   	}
 	
