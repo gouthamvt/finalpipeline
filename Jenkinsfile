@@ -69,7 +69,7 @@ stage ('Approval'){
 	{
 		always{
 steps{
-deploy adapters: [tomcat7(path: '', url: 'http:\\172.31.12.84:9050')], contextPath: '/app', war: 'http:\\172.31.12.84:9030\nexus\content\repositories\test123\nexus\happytrip\prabhav-1\${BUILD_NUMBER}\prabhav-1-${BUILD_NUMBER}.war'
+deploy adapters: [tomcat7(path: '', url: 'http:\\172.31.12.84:9050')], contextPath: '/app', war: 'http:\\172.31.12.84:9030\nexus/content/repositories/test123/nexus/happytrip/prabhav-1/${BUILD_NUMBER}/prabhav-1-${BUILD_NUMBER}.war'
              
 }
 		}
