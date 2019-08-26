@@ -39,10 +39,13 @@ dir("source")
 	stage('SonarScan and notify by email') {
 
         	steps{
+dir("source")
+    	{
 		        withSonarQubeEnv(installationName: 'SonarQube'){
               		  sh 'mvn clean package sonar:sonar'
 		    
           			  }
+}
        			 		}
    						 }
 
