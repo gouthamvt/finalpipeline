@@ -11,15 +11,7 @@ environment {
  }
   
 stages {
-    
-
-
-
-
-
-
-    stages {
-     
+      
         stage('Get ansible tool PATH') {
             steps {
                 script {
@@ -101,8 +93,7 @@ stage('Check ansible version') {
         }
 	
   	}
-}
-	
+
 	post{
 		
 
