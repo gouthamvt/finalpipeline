@@ -1,9 +1,10 @@
 pipeline {
  	agent { label 'hostgvt' }
- 
+ //tool name: 'Ansible-gvt', type: 'org.jenkinsci.plugins.ansible.AnsibleInstallation'
 tools {
         jdk 'JDK8gvtlocal'
-        maven 'linuxhostmaven'   
+        maven 'linuxhostmaven'
+        org.jenkinsci.plugins.ansible.AnsibleInstallation 'Ansible-gvt'   
      }
   
 stages {
