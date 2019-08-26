@@ -64,10 +64,11 @@ Check console output at $BUILD_URL to view the results of the build.''', compres
 		success{
 steps{
 		approved = input message: 'Release to production?', ok: 'Yes', submitter: 'gouthamvt'
-    					if (approved) {
+    					step{if (approved) {
     						withCredentials([usernamePassword(credentialsId: 'privilegedCreds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
     						echo "Approved"
 }				}
+}
 
 
 	}
