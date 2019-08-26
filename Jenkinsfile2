@@ -101,6 +101,7 @@ stage('Check ansible version') {
         }
 	
   	}
+}
 	
 	post{
 		
