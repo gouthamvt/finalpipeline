@@ -52,7 +52,7 @@ dir("source")
      
 	 stage('Nexus Artifact Publisher'){
 		steps{
-		nexusPublisher nexusInstanceId: 'nexus-123', nexusRepositoryId: 'test123', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'war', filePath: 'target/prabhav-1.war']], mavenCoordinate: [artifactId: 'prabhav-1', groupId: 'nexus.happytrip', packaging: 'war', version: '${BUILD_NUMBER}']]]
+		nexusPublisher nexusInstanceId: 'nexus-123', nexusRepositoryId: 'test123', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'war', filePath: 'source/target/prabhav-1.war']], mavenCoordinate: [artifactId: 'prabhav-1', groupId: 'nexus.happytrip', packaging: 'war', version: '${BUILD_NUMBER}']]]
 			}
 					}
 
