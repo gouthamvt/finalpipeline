@@ -10,12 +10,14 @@ stages {
     
 	stage('Source') { 
      		 steps {
-checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ansibleworkspace']], submoduleCfg: [], userRemoteConfigs: [[name: 'Playbook', url: 'https://github.com/gouthamvt/ansiblefinal.git']]])
 
+step{		checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ansibleworkspace']], submoduleCfg: [], userRemoteConfigs: [[name: 'Playbook', url: 'https://github.com/gouthamvt/ansiblefinal.git']]]) 
+}
+step{
 
-checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']], submoduleCfg: [], userRemoteConfigs: [[name: 'SourceCode', url: 'https://github.com/gouthamvt/happy-trip.git']]])
-
-            }
+checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']], submoduleCfg: [], userRemoteConfigs: [[name: 'SourceCode', url: 'https://github.com/gouthamvt/happy-trip.git']]])       
+}
+}
     				}
 	
      	stage('Compile') { 
@@ -24,7 +26,11 @@ checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleC
 		    
      	 	  sh 'java -version'
       		  sh 'mvn -version'
-      		  sh 'mvn clean package'
+dir("source")
+    	{
+        sh 'mvn clean package'
+      }
+ 
 	
 			}
 	 
@@ -67,7 +73,9 @@ checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleC
   	}
 	
 	post{
-				changed{
+		
+
+		changed{
 emailext attachLog: true, body: '''$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
 
 Check console output at $BUILD_URL to view the results of the build.''', compressLog: true, subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: '$DEFAULT_RECIPIENTS,pratdeus@gmail.com'
