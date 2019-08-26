@@ -61,7 +61,12 @@ checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleC
 Check console output at $BUILD_URL to view the results of the build.''', compressLog: true, subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: '$DEFAULT_RECIPIENTS,pratdeus@gmail.com'
 			   		    chuckNorris()
 		}
-		
+		success{
+		approved = input message: 'Release to production?', ok: 'Yes', submitter: 'gouthamvt'
+    					if (approved) {
+    						withCredentials([usernamePassword(credentialsId: 'privilegedCreds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+    						echo "Approved"
+				}
 
 	
 	}
