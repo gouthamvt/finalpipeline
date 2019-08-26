@@ -62,17 +62,17 @@ Check console output at $BUILD_URL to view the results of the build.''', compres
 			   		    chuckNorris()
 		}
 		success{
-steps{
+step{
 		approved = input message: 'Release to production?', ok: 'Yes', submitter: 'gouthamvt'
-    					step{if (approved) {
+    					if (approved) {
     						withCredentials([usernamePassword(credentialsId: 'privilegedCreds', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
     						echo "Approved"
-}				}
+			}
+
+
+	}
+	}
 }
-
-
-	}
-	}
 	
 
 }
