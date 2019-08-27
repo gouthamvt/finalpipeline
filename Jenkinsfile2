@@ -67,7 +67,9 @@ dir("source")
      */
 	 stage('Nexus Artifact Publisher'){
 		steps{
-		nexusPublisher nexusInstanceId: 'nexus-123', nexusRepositoryId: 'test123', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'war', filePath: 'source/target/prabhav-1.war']], mavenCoordinate: [artifactId: 'prabhav-1', groupId: 'nexus.happytrip1', packaging: 'war', version: '${BUILD_NUMBER}']]]
+	/*	nexusPublisher nexusInstanceId: 'nexus-123', nexusRepositoryId: 'test123', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'war', filePath: 'source/target/prabhav-1.war']], mavenCoordinate: [artifactId: 'prabhav-1', groupId: 'nexus.happytrip', packaging: 'war', version: '${BUILD_NUMBER}']]]
+*/
+nexusPublisher nexusInstanceId: 'nexus-123', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'war', filePath: 'source/target/prabhav-1.war']], mavenCoordinate: [artifactId: 'prabhav-1', groupId: 'nexus.happytrip', packaging: 'war', version: '${BUILD_NUMBER}']]]
 			}
 					}
 /*
@@ -107,7 +109,7 @@ Check console output at $BUILD_URL to view the results of the build.''', compres
 /*
 ansiblePlaybook become: true, colorized: true, credentialsId: '0c540f01-a70b-482d-a251-79bf54a02ea7', extras: '--extra-vars \'{"build_number":"${BUILD_NUMBER}"}\'', installation: 'Ansible-gvt', inventory: 'ansibleworkspace/inventories/dev.ini', playbook: 'ansibleworkspace/playbooks/install_preproduction.yml'
 */
-ansiblePlaybook become: true, colorized: true, disableHostKeyChecking: true, credentialsId: '0c540f01-a70b-482d-a251-79bf54a02ea7', extras: '--extra-vars \'{"build_number":"${BUILD_NUMBER}"}\'', installation: 'Ansible-gvt', inventory: 'ansibleworkspace/inventories/dev.ini', playbook: 'ansibleworkspace/playbooks/install_production.yml'
+ansiblePlaybook become: true, colorized: true, disableHostKeyChecking: true, credentialsId: '0c540f01-a70b-482d-a251-79bf54a02ea7', extras: '--extra-vars \'{"build_number":"${BUILD_NUMBER}", "user"="ubuntu"}\'', installation: 'Ansible-gvt', inventory: 'ansibleworkspace/inventories/dev.ini', playbook: 'ansibleworkspace/playbooks/install_production.yml'
 
 
 chuckNorris()
