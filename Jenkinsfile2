@@ -105,6 +105,10 @@ Check console output at $BUILD_URL to view the results of the build.''', compres
 
 		success{ 
 ansiblePlaybook become: true, colorized: true, credentialsId: '0c540f01-a70b-482d-a251-79bf54a02ea7', extras: '--extra-vars \'{"build_number":"${BUILD_NUMBER}"}\'', installation: 'Ansible-gvt', inventory: 'ansibleworkspace/inventories/dev.ini', playbook: 'ansibleworkspace/playbooks/install_preproduction.yml'
+
+ansiblePlaybook become: true, colorized: true, disableHostKeyChecking: true, credentialsId: '0c540f01-a70b-482d-a251-79bf54a02ea7', extras: '--extra-vars \'{"build_number":"${BUILD_NUMBER}"}\'', installation: 'Ansible-gvt', inventory: 'ansibleworkspace/inventories/dev.ini', playbook: 'ansibleworkspace/playbooks/install_production.yml'
+
+
 chuckNorris()
 }
 		
