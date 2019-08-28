@@ -1,0 +1,123 @@
+pipeline {
+ 	agent { label 'hostgvt' }
+// tool name: 'Ansible-gvt', type: 'org.jenkinsci.plugins.ansible.AnsibleInstallation'
+tools {
+        jdk 'JDK8gvtlocal'
+        maven 'linuxhostmaven'
+  //     org.jenkinsci.plugins.ansible.AnsibleInstallation 'Ansible-gvt'   
+     }
+environment {
+        JOB_ANSIBLE_TOOL = "Ansible-gvt"
+ }
+  
+stages {
+      
+        stage('Get ansible tool PATH') {
+            steps {
+                script {
+                    ansibleHome = tool name: "${env.JOB_ANSIBLE_TOOL}"
+ }
+            }
+        }
+
+
+
+
+	stage('Source') { 
+     		 steps {
+
+	checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ansibleworkspace']], submoduleCfg: [], userRemoteConfigs: [[name: 'Playbook', url: 'https://github.com/gouthamvt/ansiblefinal.git']]]) 
+
+
+checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']], submoduleCfg: [], userRemoteConfigs: [[name: 'SourceCode', url: 'https://github.com/gouthamvt/happy-trip.git']]])       
+
+}
+    				}
+	
+     	stage('Compile') { 
+          
+	        steps{
+		    
+     	 	  sh 'java -version'
+      		  sh 'mvn -version'
+dir("source")
+    	{
+        sh 'mvn clean package'
+      }
+ 
+	
+			}
+	 
+  			 	 }
+
+	/*
+	stage('SonarScan and notify by email') {
+
+        	steps{
+dir("source")
+    	{
+		        withSonarQubeEnv(installationName: 'SonarQube'){
+              		  sh 'mvn clean package sonar:sonar'
+		    
+          			  }
+}
+       			 		}
+   						 }
+
+     */
+	 stage('Nexus Artifact Publisher'){
+		steps{
+	/*	nexusPublisher nexusInstanceId: 'nexus-123', nexusRepositoryId: 'test123', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'war', filePath: 'source/target/prabhav-1.war']], mavenCoordinate: [artifactId: 'prabhav-1', groupId: 'nexus.happytrip', packaging: 'war', version: '${BUILD_NUMBER}']]]
+*/
+nexusPublisher nexusInstanceId: 'nexus-123', nexusRepositoryId: 'releases', packages: [[$class: 'MavenPackage', mavenAssetList: [[classifier: '', extension: 'war', filePath: 'source/target/prabhav-1.war']], mavenCoordinate: [artifactId: 'prabhav-1', groupId: 'nexus.happytrip', packaging: 'war', version: '${BUILD_NUMBER}']]]
+			}
+					}
+/*
+	stage ('Approval'){
+			agent none
+            steps{
+              script {
+                 approved = input message: 'Release to production?', ok: 'Yes', submitter: 'pm'
+ 	   	if (approved) {
+    		withCredentials([usernamePassword(credentialsId: 'privilegedCreds', usernameVariable: 'USER', passwordVariable: 'PASS')]) 	
+			{		echo "Approved"
+    					        		}
+    				}
+    		      }
+                }
+                          }
+*/
+stage('Check ansible version') {
+            steps {
+                sh "${ansibleHome}/ansible --version"
+ sh "${ansibleHome}/ansible-playbook --version"
+ }
+        }
+	
+  	}
+
+	post{
+		
+
+		changed{
+emailext attachLog: true, body: '''$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS:
+
+Check console output at $BUILD_URL to view the results of the build.''', compressLog: true, subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: '$DEFAULT_RECIPIENTS,pratdeus@gmail.com'
+		}
+
+		success{ 
+
+ansiblePlaybook become: true, colorized: true, credentialsId: '0c540f01-a70b-482d-a251-79bf54a02ea7', extras: '--extra-vars \'{"build_number":"${BUILD_NUMBER}"}\'', installation: 'Ansible-gvt', inventory: 'ansibleworkspace/inventories/dev.ini', playbook: 'ansibleworkspace/playbooks/test_environment.yml'
+
+ansiblePlaybook become: true, colorized: true, disableHostKeyChecking: true, credentialsId: '0c540f01-a70b-482d-a251-79bf54a02ea7', extras: '--extra-vars \'{"build_number":"${BUILD_NUMBER}"}\'', installation: 'Ansible-gvt', inventory: 'ansibleworkspace/inventories/dev.ini', playbook: 'ansibleworkspace/playbooks/production_environment.yml'
+
+
+chuckNorris()
+}
+		
+
+	
+	}
+	
+
+}
