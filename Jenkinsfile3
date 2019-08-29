@@ -26,7 +26,7 @@ stages {
 	stage('Source') { 
      		 steps {
 
-	checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ansibleworkspace']], submoduleCfg: [], userRemoteConfigs: [[name: 'Playbook', url: 'https://github.com/gouthamvt/ansiblefinal.git']]]) 
+	checkout([$class: 'GitSCM', branches: [[name: e447c93bdff77432c1f637e0f7643b701231ec79]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'ansibleworkspace']], submoduleCfg: [], userRemoteConfigs: [[name: 'Playbook', url: 'https://github.com/gouthamvt/ansiblefinal.git']]]) 
 
 
 checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'source']], submoduleCfg: [], userRemoteConfigs: [[name: 'SourceCode', url: 'https://github.com/gouthamvt/happy-trip.git']]])       
